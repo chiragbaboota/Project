@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Employee Dashboard - Better Call Saul</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+    <style>
+      :root {
+  --primary-color: #E7CCCC; 
+  --secondary-color: #EDE8DC; 
+  --background-color: #A5B68D; 
+  --card-background: #C1CFA1; 
+  --text-color: #34495e; 
+  --border-color: #bdc3c7; 
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --transition-speed: 0.3s;
+  --team-lead-color: #e74c3c; 
+  --team-member-color: #9b59b6; 
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  padding: 20px;
+  animation: fadeIn 1s ease-out;
+}
+
+.header {
+  background-color: var(--primary-color);
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  border-radius: 8px 8px 0 0;
+  animation: slideIn 0.5s ease-out;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.dashboard-container {
+  background-color: var(--card-background);
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 4px 6px var(--shadow-color);
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeIn 1s ease-out 0.5s both;
+}
+
+.tabs {
+  display: flex;
+  margin-bottom: 2rem;
+}
+
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 0.75rem;
+  background-color: var(--background-color);
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+  border-radius: 8px 8px 0 0;
+  margin-right: 5px;
+}
+
+.tab:last-child {
+  margin-right: 0;
+}
+
+.tab.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+h2 {
+  color: var(#34495e);
+  margin-bottom: 1.5rem;
+  animation: slideIn 0.5s ease-out;
+}
+
+.department-card {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: transform var(--transition-speed) ease,
+              box-shadow var(--transition-speed) ease;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.department-card.active {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.department-header {
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: var(--primary-color);
+  color: white;
+  transition: background-color var(--transition-speed) ease;
+}
+
+.department-header:hover {
+  background-color: #2980b9;
+}
+
+.department-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-speed) ease,
+              opacity var(--transition-speed) ease;
+  opacity: 0;
+}
+
+.department-content.expanded {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.department-info {
+  padding: 1rem;
+}
+
+.department-info p {
+  margin-bottom: 0.5rem;
+}
+
+.members-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.member-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem;
+  background-color: var(--background-color);
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.team-lead {
+  color: var(--team-lead-color);
+  font-weight: 600;
+}
+
+.team-member {
+  color: var(--team-member-color);
+}
+
+.member-role {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.vacancy, .new-hire {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 8px var(--shadow-color);
+  padding: 1rem;
+  margin-bottom: 1rem;
+  animation: fadeIn 0.5s ease-out;
+  transition: transform 0.3s ease;
+}
+
+.vacancy:hover, .new-hire:hover {
+  transform: translateY(-5px);
+}
+
+.apply-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  display: inline-block;
+  transition: background-color var(--transition-speed) ease,
+              transform 0.3s ease;
+}
+
+.apply-btn:hover {
+  background-color: #27ae60;
+  animation: pulse 0.5s ease-in-out;
+}
+
+.form-section {
+  margin-top: 2rem;
+  animation: slideIn 0.5s ease-out;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input, textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 1rem;
+  transition: border-color var(--transition-speed) ease,
+              box-shadow 0.3s ease;
+}
+
+input:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+textarea {
+  resize: vertical;
+}
+
+button.submit-btn {
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease,
+              transform 0.3s ease;
+}
+
+button.submit-btn:hover {
+  background-color: #27ae60;
+  transform: translateY(-2px);
+}
+
+.footer {
+  text-align: center;
+  margin-top: 2rem;
+  color: #7f8c8d;
+  font-size: 0.875rem;
+  animation: fadeIn 1s ease-out 1s both;
+}
+
+#logoutBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: var(--secondary-color);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color var(--transition-speed) ease;
+}
+
+#logoutBtn:hover {
+  background-color: #27ae60;
+}
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <h1>Better Call Saul - Employee Dashboard</h1>
+      <button id="logoutBtn" onclick="logout()">Logout</button>
+    </header>
+    <div class="dashboard-container">
+      <div class="tabs">
+        <div class="tab active" data-tab="departments">Departments</div>
+        <div class="tab" data-tab="vacancies">Job Vacancies</div>
+        <div class="tab" data-tab="new-hires">New Hires</div>
+      </div>
+
+      <section class="departments" id="departmentsSection">
+        <h2>Departments</h2>
+        <div id="departments-container"></div>
+      </section>
+
+      <section class="vacancies" id="vacanciesSection" style="display: none">
+        <h2>Job Vacancies</h2>
+        <div class="vacancy">
+          <h3>Software Developer</h3>
+          <p><strong>Company:</strong> Tata consultant Services</p>
+          <p><strong>Location:</strong> Gandhinagar, Gujarat</p>
+          <p>
+            <strong>Description:</strong> Develop and maintain web applications.
+            Experience with JavaScript, HTML, CSS, and React required.
+          </p>
+          <button class="apply-btn" onclick="showApplicationForm()">
+            Apply
+          </button>
+        </div>
+        <div class="vacancy">
+          <h3>Data Analyst</h3>
+          <p><strong>Company:</strong> Tredence</p>
+          <p><strong>Location:</strong> Bangalore, Karnataka</p>
+          <p>
+            <strong>Description:</strong> Analyze data and generate reports.
+            Experience with SQL and Python required.
+          </p>
+          <button class="apply-btn" onclick="showApplicationForm()">
+            Apply
+          </button>
+        </div>
+        <div class="vacancy">
+          <h3>UX/UI Designer</h3>
+          <p><strong>Company:</strong> Zomato</p>
+          <p><strong>Location:</strong> Gurgaon, Haryana</p>
+          <p>
+            <strong>Description:</strong> Create user-centered designs for web
+            and mobile applications. Proficiency in Figma and Adobe Creative
+            Suite required.
+          </p>
+          <button class="apply-btn" onclick="showApplicationForm()">
+            Apply
+          </button>
+        </div>
+        <div class="vacancy">
+          <h3>Marketing Specialist</h3>
+          <p><strong>Company:</strong> Pinstorm</p>
+          <p><strong>Location:</strong> Mumbai, Maharashtra</p>
+          <p>
+            <strong>Description:</strong> Develop and implement marketing
+            strategies. Experience with digital marketing and analytics tools
+            required.
+          </p>
+          <button class="apply-btn" onclick="showApplicationForm()">
+            Apply
+          </button>
+        </div>
+        <div class="vacancy">
+          <h3>Project Manager</h3>
+          <p><strong>Company:</strong> Infosys</p>
+          <p><strong>Location:</strong> Pune, Maharashtra</p>
+          <p>
+            <strong>Description:</strong> Lead and manage complex projects from
+            inception to completion. PMP certification and Agile methodology
+            experience preferred.
+          </p>
+          <button class="apply-btn" onclick="showApplicationForm()">
+            Apply
+          </button>
+        </div>
+      </section>
+
+      <section class="new-hires" id="newHiresSection" style="display: none">
+        <h2>New Hires</h2>
+        <div class="new-hire">
+          <h3>John Pandey</h3>
+          <p><strong>Role:</strong> Software Developer</p>
+          <p><strong>Department:</strong> Engineering</p>
+          <p><strong>Start Date:</strong> June 1, 2024</p>
+          <p><strong>Skills:</strong> JavaScript, React, Node.js</p>
+        </div>
+        <div class="new-hire">
+          <h3>Preeti Sharma</h3>
+          <p><strong>Role:</strong> Data Analyst</p>
+          <p><strong>Department:</strong> Business Intelligence</p>
+          <p><strong>Start Date:</strong> May 15, 2024</p>
+          <p><strong>Skills:</strong> SQL, Python, Data Visualization</p>
+        </div>
+        <div class="new-hire">
+          <h3>Joseph Alves</h3>
+          <p><strong>Role:</strong> UX/UI Designer</p>
+          <p><strong>Department:</strong> Design</p>
+          <p><strong>Start Date:</strong> July 1, 2024</p>
+          <p><strong>Skills:</strong> Figma, Adobe XD, User Research</p>
+        </div>
+        <div class="new-hire">
+          <h3>Anjali Kumar</h3>
+          <p><strong>Role:</strong> Marketing Specialist</p>
+          <p><strong>Department:</strong> Marketing</p>
+          <p><strong>Start Date:</strong> June 15, 2024</p>
+          <p>
+            <strong>Skills:</strong> Digital Marketing, SEO, Content Strategy
+          </p>
+        </div>
+        <div class="new-hire">
+          <h3>Tanya Majumdar</h3>
+          <p><strong>Role:</strong> Project Manager</p>
+          <p><strong>Department:</strong> Operations</p>
+          <p><strong>Start Date:</strong> August 1, 2024</p>
+          <p>
+            <strong>Skills:</strong> Agile Methodologies, Risk Management,
+            Stakeholder Communication
+          </p>
+        </div>
+      </section>
+
+      <section class="form-section" id="applicationForm" style="display: none">
+        <h2>Application Form</h2>
+        <form id="applyForm">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Enter your email address"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input
+                  type="tel"
+                  id="phone"
+                  name="phone"
+                  placeholder="Enter your phone number"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="education">Education</label>
+                <input
+                  type="text"
+                  id="education"
+                  name="education"
+                  placeholder="Enter your highest education level"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="experience">Years of Experience</label>
+                <input
+                  type="number"
+                  id="experience"
+                  name="experience"
+                  placeholder="Enter years of relevant experience"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="skills">Skills</label>
+                <input
+                  type="text"
+                  id="skills"
+                  name="skills"
+                  placeholder="Enter your skills (comma separated)"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="resume">Resume</label>
+                <input
+                  type="file"
+                  id="resume"
+                  name="resume"
+                  accept=".pdf,.doc,.docx"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="cover-letter">Cover Letter</label>
+                <textarea
+                  id="cover-letter"
+                  name="cover-letter"
+                  rows="4"
+                  placeholder="Enter your cover letter"
+                  required
+                ></textarea>
+              </div>
+              <button type="submit" class="submit-btn">Submit Application</button>
+            </form>
+          </section>
+    
+          <div class="footer">&copy; 2024 Better Call Saul | All rights reserved.</div>
+        </div>
+    
+        <script>
+          const departments = [
+            {
+              name: "Engineering",
+              teamLead: "Rohan Iyer",
+              teamSize: 15,
+              responsibilities:
+                "Develop and maintain software products, implement new technologies, and ensure system reliability.",
+              members: [
+                { name: "Kunal Jadeja", role: "Senior Developer" },
+                { name: "Ravi Nair", role: "DevOps Engineer" },
+                { name: "Arjun Sheikh", role: "UI/UX Designer" },
+              ],
+            },
+            {
+              name: "Marketing",
+              teamLead: "Anita Dogra",
+              teamSize: 8,
+              responsibilities:
+                "Develop marketing strategies, manage brand identity, and drive customer engagement across various channels.",
+              members: [
+                { name: "Manish Lodha", role: "Digital Marketing Specialist" },
+                { name: "Allu Alahwat", role: "Content Strategist" },
+                { name: "Jenny Kapoor", role: "SEO Expert" },
+              ],
+            },
+            {
+              name: "Human Resources",
+              teamLead: "Alok Bhatia",
+              teamSize: 6,
+              responsibilities:
+                "Manage recruitment, employee relations, training and development, and ensure compliance with labor laws.",
+              members: [
+                { name: "Kavita Menon", role: "Recruitment Specialist" },
+                { name: "Vivan Shah", role: "Employee Relations Manager" },
+                { name: "Rajesh Gupta", role: "Training Coordinator" },
+              ],
+            },
+            {
+              name: "Finance",
+              teamLead: "Gurinder Kaul",
+              teamSize: 10,
+              responsibilities:
+                "Manage company finances, prepare financial reports, conduct audits, and provide financial strategy advice.",
+              members: [
+                { name: "Lalit yadav", role: "Financial Analyst" },
+                { name: "Mukesh Sharma", role: "Accountant" },
+                { name: "Pooja Chauhan", role: "Payroll Specialist" },
+              ],
+            },
+            {
+              name: "Customer Support",
+              teamLead: "Rachel Goyal",
+              teamSize: 12,
+              responsibilities:
+                "Provide excellent customer service, resolve customer inquiries and complaints, and gather customer feedback.",
+              members: [
+                { name: "Krytal Dhawan", role: "Senior Support Representative" },
+                { name: "Arush Talwaar", role: "Customer Experience Specialist" },
+                { name: "Alizeh Ali", role: "Technical Support Engineer" },
+              ],
+            },
+          ];
+    
+          function createDepartmentCard(department, index) {
+            const card = document.createElement("div");
+            card.className = "department-card";
+            card.style.animationDelay = `${index * 100}ms`;
+    
+            setTimeout(() => {
+              card.classList.add("active");
+            }, index * 100);
+    
+            card.innerHTML = `
+              <div class="department-header" onclick="toggleDepartment(this)">
+                  <h3>${department.name}</h3>
+                  <span class="toggle-icon">▼</span>
+              </div>
+              <div class="department-content">
+                  <div class="department-info">
+                      <p><strong class="team-lead">Team Lead: ${department.teamLead}</strong></p>
+                      <p>Team Size: ${department.teamSize} members</p>
+                      <p>Key Responsibilities: ${department.responsibilities}</p>
+                      <h4>Notable Members:</h4>
+                      <ul class="members-list">
+                          ${department.members
+                            .map(
+                              (member, memberIndex) => `
+                              <li class="member-item" style="animation-delay: ${
+                                memberIndex * 100
+                              }ms">
+                                  <span class="team-member">${member.name}</span>
+                                  <span class="member-role">${member.role}</span>
+                              </li>
+                          `
+                            )
+                            .join("")}
+                      </ul>
+                  </div>
+              </div>
+          `;
+    
+            return card;
+          }
+    
+          function renderDepartments() {
+            const container = document.getElementById("departments-container");
+            departments.forEach((department, index) => {
+              container.appendChild(createDepartmentCard(department, index));
+            });
+          }
+    
+          function toggleDepartment(header) {
+            const content = header.nextElementSibling;
+            const icon = header.querySelector(".toggle-icon");
+    
+            content.classList.toggle("expanded");
+            icon.textContent = content.classList.contains("expanded") ? "▲" : "▼";
+    
+            if (content.classList.contains("expanded")) {
+              content.style.opacity = "1";
+            } else {
+              content.style.opacity = "0";
+            }
+          }
+    
+          function showApplicationForm() {
+            const form = document.getElementById("applicationForm");
+            form.style.display = "block";
+            form.scrollIntoView({ behavior: "smooth" });
+          }
+    
+          function switchTab(tabName) {
+            const departmentsSection = document.getElementById("departmentsSection");
+            const vacanciesSection = document.getElementById("vacanciesSection");
+            const newHiresSection = document.getElementById("newHiresSection");
+            const applicationForm = document.getElementById("applicationForm");
+            const tabs = document.querySelectorAll(".tab");
+    
+            departmentsSection.style.display = tabName === "departments" ? "block" : "none";
+            vacanciesSection.style.display = tabName === "vacancies" ? "block" : "none";
+            newHiresSection.style.display = tabName === "new-hires" ? "block" : "none";
+            applicationForm.style.display = "none";
+    
+            tabs.forEach((tab) => tab.classList.remove("active"));
+            document.querySelector(`.tab[data-tab="${tabName}"]`).classList.add("active");
+          }
+    
+          document.querySelectorAll(".tab").forEach((tab) => {
+            tab.addEventListener("click", () => {
+              switchTab(tab.dataset.tab);
+            });
+          });
+    
+          document.getElementById("applyForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+            alert("Application submitted successfully!");
+            this.reset();
+            document.getElementById("applicationForm").style.display = "none";
+          });
+    
+          document.addEventListener("DOMContentLoaded", function () {
+            renderDepartments();
+    
+            const vacancies = document.querySelectorAll(".vacancy");
+            vacancies.forEach((vacancy, index) => {
+              vacancy.style.animationDelay = `${index * 0.1}s`;
+            });
+    
+            const newHires = document.querySelectorAll(".new-hire");
+            newHires.forEach((newHire, index) => {
+              newHire.style.animationDelay = `${index * 0.1}s`;
+            });
+          });
+    
+          function logout() {
+            sessionStorage.clear();
+            window.location.href = 'index.html';
+          }
+        </script>
+      </body>
+    </html>
